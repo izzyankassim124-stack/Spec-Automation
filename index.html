@@ -1,0 +1,631 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Auto Format Jadual Spesifikasi</title>
+<style>
+/* Layout: one narrow working column; three numbered steps (a real sequence) with a live sheet preview in step 2. */
+:root {
+  --bg: #F2F5F7;
+  --surface: #FFFFFF;
+  --ink: #14232B;
+  --muted: #55666F;
+  --line: #D3DCE1;
+  --accent: #0B6E94;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #E3F1F7;
+  --danger: #B3261E;
+  --danger-soft: #FBEAE8;
+  --ok: #1B7A43;
+  --ok-soft: #E4F3EA;
+  --sheet-bg: #FFFFFF;
+  --sheet-ink: #000000;
+  --sheet-line: #1a1a1a;
+  --font-ui: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-head: "Space Grotesk", "Inter", system-ui, Arial, sans-serif;
+  --font-sheet: Arial, Helvetica, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E171C; --surface: #15222A; --ink: #E5ECEF; --muted: #93A4AD; --line: #2A3A43;
+    --accent: #5BBDE4; --accent-ink: #06222C; --accent-soft: #17313C;
+    --danger: #FF8A80; --danger-soft: #3A1E1C; --ok: #6FD39A; --ok-soft: #14301F;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E171C; --surface: #15222A; --ink: #E5ECEF; --muted: #93A4AD; --line: #2A3A43;
+  --accent: #5BBDE4; --accent-ink: #06222C; --accent-soft: #17313C;
+  --danger: #FF8A80; --danger-soft: #3A1E1C; --ok: #6FD39A; --ok-soft: #14301F;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--font-ui); font-size: 15px; line-height: 1.5;
+  padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 48px;
+}
+main { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+h1 { font-family: var(--font-head); font-size: 1.75rem; line-height: 1.15; margin: 0 0 6px; text-wrap: balance; letter-spacing: -0.01em; }
+.lede { margin: 0; color: var(--muted); max-width: 60ch; }
+.step { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.step h2 { font-family: var(--font-head); font-size: 1.05rem; margin: 0; display: flex; align-items: center; gap: 10px; }
+.num { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-size: 0.8rem; font-weight: 700; flex: none; }
+.hint { color: var(--muted); font-size: 0.875rem; margin: 0; }
+
+/* paste input */
+.lbl { font-size: 0.85rem; color: var(--muted); }
+textarea#paste { width: 100%; min-height: 150px; resize: vertical; font: 0.8rem/1.45 ui-monospace, "SF Mono", Menlo, Consolas, monospace; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); white-space: pre; overflow: auto; }
+textarea#paste:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+.hint.bad { color: var(--danger); }
+.alt { display: flex; align-items: center; gap: 8px; }
+.filebtn { color: var(--accent); text-decoration: underline; cursor: pointer; font-size: 0.875rem; }
+.filebtn input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.filebtn:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+.filechip { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 12px; border-radius: 8px; background: var(--accent-soft); }
+.filechip b { overflow-wrap: anywhere; font-weight: 600; }
+.filechip span { color: var(--muted); font-size: 0.85rem; }
+
+/* swatches */
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 10px; }
+.sw { display: flex; flex-direction: column; gap: 6px; align-items: stretch; padding: 8px; background: var(--surface); border: 1.5px solid var(--line); border-radius: 8px; color: var(--ink); font: inherit; cursor: pointer; text-align: left; }
+.sw:hover { border-color: var(--muted); }
+.sw[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+.sw:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pair { display: grid; grid-template-rows: 18px 18px; border-radius: 4px; overflow: hidden; border: 1px solid var(--line); }
+.sw .nm { font-size: 0.85rem; font-weight: 600; text-transform: capitalize; }
+.sw .last { font-size: 0.72rem; color: var(--muted); min-height: 1em; margin-top: -4px; }
+
+.pickers { display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: end; }
+.pick { display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem; color: var(--muted); }
+.pick .row { display: flex; align-items: center; gap: 8px; color: var(--ink); }
+.pick input[type=color] { width: 44px; height: 34px; padding: 2px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); cursor: pointer; }
+.pick code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 0.85rem; }
+
+/* sheet preview (simulates the Excel output, so it keeps Excel's own black-on-white) */
+.preview-wrap { overflow-x: auto; }
+.sheet { min-width: 460px; display: grid; grid-template-columns: 1fr 78px 1fr; font-family: var(--font-sheet); font-size: 12px; color: var(--sheet-ink); background: var(--sheet-bg); border: 2px solid var(--sheet-line); }
+.sheet > div { padding: 5px 7px; border-right: 2px solid var(--sheet-line); display: flex; align-items: center; min-height: 26px; }
+.sheet > div:nth-child(3n) { border-right: 0; }
+.sheet .h { background: var(--pv-dark); color: #fff; font-weight: 700; justify-content: center; text-align: center; border-bottom: 2px solid var(--sheet-line); }
+.sheet .item { background: var(--pv-light); font-weight: 700; border: 1px solid var(--sheet-line); border-right-width: 1px; }
+.sheet .q { justify-content: center; }
+.sheet .endblk { border-bottom: 2px solid var(--sheet-line); }
+
+/* actions */
+.actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; }
+.field { display: flex; flex-direction: column; gap: 4px; flex: 1 1 220px; min-width: 0; font-size: 0.85rem; color: var(--muted); }
+.field input { font: inherit; font-size: 0.95rem; padding: 9px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); min-width: 0; }
+.field input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+button.btn { font: inherit; font-weight: 600; padding: 10px 18px; border-radius: 6px; border: 1.5px solid var(--accent); background: var(--accent); color: var(--accent-ink); cursor: pointer; }
+button.btn.ghost { background: transparent; color: var(--accent); }
+button.btn:disabled { opacity: .45; cursor: not-allowed; }
+button.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button.link { font: inherit; background: none; border: 0; color: var(--accent); text-decoration: underline; cursor: pointer; padding: 0; }
+.msg { padding: 12px 14px; border-radius: 8px; font-size: 0.92rem; }
+.msg.err { background: var(--danger-soft); color: var(--danger); }
+.msg.ok { background: var(--ok-soft); color: var(--ok); display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; justify-content: space-between; }
+.msg.ok .btn { padding: 8px 14px; }
+.msg.info { background: var(--accent-soft); color: var(--ink); }
+footer { color: var(--muted); font-size: 0.8rem; max-width: 66ch; }
+@media (max-width: 480px) { h1 { font-size: 1.4rem; } .step { padding: 16px; } }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+
+<main>
+  <header>
+    <h1>Auto Format Jadual Spesifikasi</h1>
+    <p class="lede">Tukar data mentah ePerolehan kepada jadual spesifikasi syarikat. Data diproses dalam browser anda dan tidak dihantar ke mana-mana server.</p>
+  </header>
+
+  <section class="step" aria-labelledby="s1">
+    <h2 id="s1"><span class="num">1</span>Data dari ePerolehan</h2>
+    <label class="lbl" for="paste">Paste teks jadual spesifikasi</label>
+    <textarea id="paste" rows="8" spellcheck="false" placeholder="Copy keseluruhan jadual dari ePerolehan, termasuk header (Item, Spesifikasi, Kuantiti…), kemudian paste di sini."></textarea>
+    <p class="hint" id="pastenote" aria-live="polite"></p>
+    <div class="alt">
+      <span class="hint">Atau</span>
+      <label class="filebtn">upload fail .xlsx<input type="file" id="file" accept=".xlsx"></label>
+    </div>
+    <div class="filechip" id="filechip" hidden>
+      <b id="fname"></b><span id="fsize"></span>
+      <button class="link" type="button" id="clearfile">Buang fail</button>
+    </div>
+  </section>
+
+  <section class="step" aria-labelledby="s2">
+    <h2 id="s2"><span class="num">2</span>Warna untuk tender ini</h2>
+    <p class="hint">Pilih satu pasangan warna (header gelap dan baris item cerah), atau tetapkan sendiri. Warna yang digunakan kali terakhir ditanda supaya anda boleh tukar.</p>
+    <div class="swatches" id="swatches" role="group" aria-label="Pasangan warna"></div>
+    <div class="pickers">
+      <div class="pick">
+        <label for="darkPick">Header (gelap)</label>
+        <div class="row"><input type="color" id="darkPick"><code id="darkHex"></code></div>
+      </div>
+      <div class="pick">
+        <label for="lightPick">Baris item (cerah)</label>
+        <div class="row"><input type="color" id="lightPick"><code id="lightHex"></code></div>
+      </div>
+    </div>
+    <div class="preview-wrap" aria-label="Pratonton jadual">
+      <div class="sheet" id="sheet" aria-hidden="true">
+        <div class="h">ITEM<br>SPESIFIKASI</div><div class="h q">KUANTITI</div><div class="h">MAKLUMBALAS</div>
+        <div class="item">1. PERKHIDMATAN SEWAAN SERVER</div><div class="item q">2</div><div class="item"></div>
+        <div>1.1 Server : VM HOST SERVER</div><div></div><div></div>
+        <div class="endblk">1.2 Kuantiti : 2</div><div class="endblk"></div><div class="endblk"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step" aria-labelledby="s3">
+    <h2 id="s3"><span class="num">3</span>Jana dan muat turun</h2>
+    <div class="actions">
+      <div class="field">
+        <label for="outname">Nama fail (pilihan)</label>
+        <input id="outname" type="text" value="JADUAL_SPESIFIKASI" autocomplete="off">
+      </div>
+      <button class="btn" type="button" id="go" disabled>Jana Excel</button>
+    </div>
+    <div id="status" role="status" aria-live="polite"></div>
+  </section>
+
+  <footer>Satu fail untuk satu tender. Warna header dan baris item ialah conditional formatting dan border seperti template syarikat. Jika Excel gagal dijana, semak sama ada ePerolehan menukar susunan kolum.</footer>
+</main>
+
+<script>
+/* Module C engine (JavaScript port of tender_excel.py). Works in browser (global ExcelJS) and node. */
+(function (root) {
+  "use strict";
+
+  const SHEET_NAME = "SPESIFIKASI";
+  const COL_WIDTHS = { 1: 60.14, 2: 9.86, 3: 53.57 }; // from the company template
+  const MAIN_ROW_MIN_HEIGHT = 33.0;
+  const PRESETS = {
+    biru: "0F9ED5", oren: "E97132", hijau: "196B24", ungu: "A02B93",
+    merah: "C00000", kuning: "FFC000", pink: "D6336C", kelabu: "7F7F7F",
+  };
+
+  class RawFormatError extends Error {}
+
+  // ---------- colours (same tint maths as Excel theme colours) ----------
+  function hex6(c) {
+    const h = String(c).trim().replace(/^#/, "").toUpperCase();
+    if (!/^[0-9A-F]{6}$/.test(h)) throw new Error("Kod warna tak sah: " + c);
+    return h;
+  }
+  function rgbToHls(r, g, b) {
+    const mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+    const l = (mn + mx) / 2;
+    if (mx === mn) return [0, l, 0];
+    const d = mx - mn;
+    const s = l <= 0.5 ? d / (mx + mn) : d / (2 - mx - mn);
+    const rc = (mx - r) / d, gc = (mx - g) / d, bc = (mx - b) / d;
+    let h = r === mx ? bc - gc : g === mx ? 2 + rc - bc : 4 + gc - rc;
+    h = ((h / 6) % 1 + 1) % 1;
+    return [h, l, s];
+  }
+  function hlsToRgb(h, l, s) {
+    if (s === 0) return [l, l, l];
+    const m2 = l <= 0.5 ? l * (1 + s) : l + s - l * s, m1 = 2 * l - m2;
+    const v = (m1, m2, hue) => {
+      hue = ((hue % 1) + 1) % 1;
+      if (hue < 1 / 6) return m1 + (m2 - m1) * hue * 6;
+      if (hue < 0.5) return m2;
+      if (hue < 2 / 3) return m1 + (m2 - m1) * (2 / 3 - hue) * 6;
+      return m1;
+    };
+    return [v(m1, m2, h + 1 / 3), v(m1, m2, h), v(m1, m2, h - 1 / 3)];
+  }
+  function applyTint(hex, tint) {
+    const r = parseInt(hex.slice(0, 2), 16) / 255, g = parseInt(hex.slice(2, 4), 16) / 255, b = parseInt(hex.slice(4, 6), 16) / 255;
+    let [h, l, s] = rgbToHls(r, g, b);
+    l = tint < 0 ? l * (1 + tint) : l * (1 - tint) + tint;
+    return hlsToRgb(h, l, s).map((x) => Math.round(x * 255).toString(16).padStart(2, "0")).join("").toUpperCase();
+  }
+  function paletteFromBase(base) {
+    const b = hex6(PRESETS[String(base).toLowerCase()] || base);
+    return { dark: applyTint(b, -0.5), light: applyTint(b, 0.8) };
+  }
+
+  // ---------- step 1: read raw ePerolehan workbook ----------
+  function norm(v) { return String(v == null ? "" : v).replace(/\s+/g, " ").trim().toLowerCase(); }
+  function cellText(v) {
+    if (v == null) return "";
+    if (v instanceof Date) return v.toISOString();
+    if (typeof v === "object") {
+      if (v.richText) return v.richText.map((t) => t.text).join("");
+      if ("result" in v) return cellText(v.result);
+      if (v.text !== undefined) return cellText(v.text);
+      return String(v);
+    }
+    return String(v);
+  }
+  function rawValue(cell) { // skip the echo ExcelJS gives for merged "slave" cells
+    if (cell.isMerged && cell.master && cell.master.address !== cell.address) return null;
+    return cell.value;
+  }
+
+  async function readRaw(ExcelJS, arrayBuffer) {
+    const wb = new ExcelJS.Workbook();
+    try { await wb.xlsx.load(arrayBuffer); }
+    catch (e) { throw new RawFormatError("Fail ini bukan Excel (.xlsx) yang sah. Simpan sebagai .xlsx dan cuba lagi."); }
+    const ws = wb.worksheets[0];
+    if (!ws) throw new RawFormatError("Fail Excel kosong.");
+
+    let headerRow = null, colItem = null, colQty = null;
+    for (let r = 1; r <= Math.min(ws.rowCount, 30); r++) {
+      const cells = {};
+      ws.getRow(r).eachCell({ includeEmpty: false }, (cell, col) => {
+        const t = norm(cellText(rawValue(cell)));
+        if (t && !(t in cells)) cells[t] = col;
+      });
+      if ("item" in cells && "kuantiti" in cells) { headerRow = r; colItem = cells.item; colQty = cells.kuantiti; break; }
+    }
+    if (headerRow === null)
+      throw new RawFormatError("Header 'Item' dan 'Kuantiti' tak dijumpai dalam 30 baris pertama. Format ePerolehan mungkin berubah, atau fail salah.");
+    let hasSpec = false;
+    ws.getRow(headerRow + 1).eachCell({ includeEmpty: false }, (cell) => { if (norm(cellText(rawValue(cell))) === "spesifikasi") hasSpec = true; });
+    if (!hasSpec) throw new RawFormatError("Header 'Spesifikasi' tak dijumpai di bawah 'Item'.");
+
+    const rows = [];
+    for (let r = headerRow + 2; r <= ws.rowCount; r++) {
+      let text = cellText(rawValue(ws.getCell(r, colItem))).replace(/[ \t]+/g, " ").trim();
+      let qty = rawValue(ws.getCell(r, colQty));
+      if (qty && typeof qty === "object" && !(qty instanceof Date)) qty = "result" in qty ? qty.result : cellText(qty);
+      if (typeof qty === "string") qty = qty.trim() || null;
+      if (qty === undefined) qty = null;
+      if (!text && qty === null) continue; // blank row
+      if (text.toLowerCase() === "ya" || text.toLowerCase() === "- pilih satu -") continue; // widget leftovers
+      rows.push({ text, qty });
+    }
+    if (!rows.length) throw new RawFormatError("Tiada data dijumpai selepas header.");
+    return rows;
+  }
+
+
+  // ---------- step 1b: read pasted text (tab-separated, as copied from the ePerolehan page / Excel) ----------
+  function parseDelimited(text) {
+    text = String(text).replace(/\r\n?/g, "\n");
+    const attempt = (quotes) => {
+      const rows = []; let row = [], f = "", inQ = false, start = true;
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (inQ) {
+          if (ch === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else inQ = false; }
+          else f += ch;
+          continue;
+        }
+        if (ch === '"' && quotes && start && f === "") { inQ = true; start = false; continue; }
+        if (ch === "\t") { row.push(f); f = ""; start = true; continue; }
+        if (ch === "\n") { row.push(f); rows.push(row); row = []; f = ""; start = true; continue; }
+        f += ch; start = false;
+      }
+      if (inQ) return null; // unterminated quote: caller retries without quote handling
+      if (f !== "" || row.length) { row.push(f); rows.push(row); }
+      return rows;
+    };
+    return attempt(true) || attempt(false);
+  }
+
+  // ePerolehan columns: Item, UOM, Freq., No. UOM/day, No. UOM/month, Quantity (index 5), Mandatory Spec., Response, Offer.
+  // In pasted text the item text is often on its own line and the values line then starts at "UOM",
+  // so Quantity sits at index 4 on that line.
+  const DEFAULT_QTY_COL = 5;
+  const NOISE = new Set(["yes", "no", "ya", "tidak", "text", "teks", "- pilih satu -", "- select one -", "-- select one --"]);
+  const HEADER_END = new Set(["specification", "spesifikasi"]);
+  const isNum = (s) => /^\d+(?:[.,]\d+)*$/.test(String(s == null ? "" : s).trim());
+  function toQty(s) {
+    s = String(s == null ? "" : s).trim();
+    if (!s) return null;
+    if (/^\d{1,3}(,\d{3})+$/.test(s)) return Number(s.replace(/,/g, ""));
+    if (/^\d+(\.\d+)?$/.test(s)) return Number(s);
+    return s;
+  }
+  const clean = (s) => String(s == null ? "" : s).replace(/[ \t ]+/g, " ").trim();
+
+  function rowsFromText(text) {
+    const records = parseDelimited(text);
+    const notes = [];
+
+    // header: a line with "Item" and "Quantity"/"Kuantiti" (English or Malay), optionally followed by a lone "Specification" line
+    let start = 0, qtyCol = DEFAULT_QTY_COL;
+    for (let r = 0; r < Math.min(records.length, 30); r++) {
+      const cells = records[r].map(norm);
+      const q = cells.findIndex((c) => c === "quantity" || c === "kuantiti");
+      if (q >= 0 && cells.some((c) => c === "item" || c === "item specification" || c === "item spesifikasi")) {
+        qtyCol = q; start = r + 1;
+        const filled = (records[start] || []).map(norm).filter(Boolean);
+        if (filled.length && filled.every((c) => HEADER_END.has(c))) start++;
+        break;
+      }
+    }
+
+    const rows = [];
+    for (let r = start; r < records.length; r++) {
+      const cells = records[r].map((c) => String(c == null ? "" : c));
+      const filled = cells.map(clean).filter(Boolean);
+      if (!filled.length) continue;                                         // blank line
+      if (filled.every((c) => NOISE.has(c.toLowerCase()))) continue;        // "Yes", "Text", dropdown leftovers
+      const first = clean(cells[0]);
+
+      if (isNum(cells[qtyCol]) && first) {                                  // item text and quantity on the same line
+        rows.push({ text: first, qty: toQty(cells[qtyCol]) });
+      } else if (qtyCol >= 2 && isNum(cells[qtyCol - 1]) && first && first.length <= 30 && rows.length && rows[rows.length - 1].qty === null) {
+        rows[rows.length - 1].qty = toQty(cells[qtyCol - 1]);               // values line (UOM ... Quantity) belongs to the item line above
+      } else if (first && !NOISE.has(first.toLowerCase())) {
+        rows.push({ text: first, qty: null });                              // spec / title line
+      }
+    }
+    if (!rows.length) throw new RawFormatError("Tiada data dijumpai. Copy keseluruhan jadual dari ePerolehan (termasuk header) dan paste semula.");
+    if (!rows.some((x) => x.qty !== null))
+      throw new RawFormatError("Tiada Kuantiti dijumpai. Copy keseluruhan jadual dari ePerolehan, termasuk baris item dan nilai Quantity, kemudian paste semula.");
+    return { rows, notes };
+  }
+
+  // ---------- step 2: group rows into specification blocks ----------
+  const NUM = /^\s*(\d+(?:\.\d+)+\.?(?:\s+|\.)|\d+\.\s+)\S/;
+  function prefixOf(text) { const m = NUM.exec(text); return m ? m[1].trim().replace(/\.$/, "") : null; }
+
+  function groupBlocks(rows) {
+    const blocks = [];
+    let cur = null;
+    rows.forEach((row, i) => {
+      if (row.qty !== null) {
+        if (cur) blocks.push(cur);
+        blocks.push([i, i, true]);
+        cur = null;
+        return;
+      }
+      const prefix = prefixOf(row.text);
+      if (cur === null) { cur = [i, i, false]; return; }
+      const firstPrefix = prefixOf(rows[cur[0]].text);
+      const titleOnly = firstPrefix === null && cur[0] === cur[1];
+      const child = prefix !== null && firstPrefix !== null && prefix.startsWith(firstPrefix + ".") && cur[0] === cur[1];
+      if (prefix !== null && !titleOnly && !child) { blocks.push(cur); cur = [i, i, false]; }
+      else cur[1] = i;
+    });
+    if (cur) blocks.push(cur);
+    return blocks;
+  }
+
+  // ---------- step 3: write the formatted workbook ----------
+  function estHeight(text) {
+    const perLine = Math.floor(60 * 1.2);
+    const lines = String(text).split("\n").reduce((n, p) => n + Math.max(1, Math.ceil(p.length / perLine)), 0);
+    return Math.max(15.75, Math.round((lines * 12 + 3.75) * 100) / 100);
+  }
+
+  async function buildWorkbook(ExcelJS, rows, palette) {
+    const med = { style: "medium" }, thin = { style: "thin" };
+    const argb = (h) => "FF" + h;
+    const font = (o) => Object.assign({ name: "Arial", size: 9, color: { argb: "FF000000" } }, o || {});
+    const solid = (h) => ({ type: "pattern", pattern: "solid", fgColor: { argb: argb(h) }, bgColor: { argb: argb(h) } });
+
+    const wb = new ExcelJS.Workbook();
+    const ws = wb.addWorksheet(SHEET_NAME, { pageSetup: { paperSize: 9, orientation: "portrait", scale: 70 } });
+    Object.entries(COL_WIDTHS).forEach(([c, w]) => { ws.getColumn(Number(c)).width = w; });
+
+    // header rows 1-2
+    ws.getCell("A1").value = "ITEM"; ws.getCell("A2").value = "SPESIFIKASI";
+    ws.getCell("B1").value = "KUANTITI"; ws.getCell("C1").value = "MAKLUMBALAS";
+    for (const r of [1, 2]) {
+      ws.getRow(r).height = 15.75;
+      for (const c of [1, 2, 3]) {
+        const cell = ws.getCell(r, c);
+        cell.font = font({ bold: true, color: { argb: "FFFFFFFF" } });
+        cell.fill = solid(palette.dark);
+        cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true };
+        cell.border = { left: med, right: med, top: med, bottom: med };
+      }
+    }
+    ws.mergeCells("B1:B2");
+    ws.mergeCells("C1:C2");
+
+    // body
+    const blocks = groupBlocks(rows);
+    for (const [first, last, isMain] of blocks) {
+      const r0 = first + 3, r1 = last + 3;
+      for (let r = r0; r <= r1; r++) {
+        const row = rows[r - 3];
+        ws.getRow(r).height = isMain ? Math.max(MAIN_ROW_MIN_HEIGHT, estHeight(row.text)) : estHeight(row.text);
+        const top = isMain ? med : undefined, bottom = r === r1 && !isMain ? med : undefined;
+        for (const c of [1, 2, 3]) {
+          const cell = ws.getCell(r, c);
+          cell.font = font();
+          cell.fill = solid("FFFFFF");
+          cell.border = { left: med, right: med, top, bottom };
+        }
+        ws.getCell(r, 1).value = row.text;
+        ws.getCell(r, 1).alignment = { horizontal: "left", vertical: "middle", wrapText: true };
+        ws.getCell(r, 2).alignment = { horizontal: "center", vertical: "middle" };
+        ws.getCell(r, 3).alignment = { horizontal: "left", vertical: "middle", wrapText: true };
+      }
+      if (isMain) ws.getCell(r0, 2).value = rows[first].qty;
+      else if (r1 > r0) {
+        ws.mergeCells(r0, 2, r1, 2);
+        ws.mergeCells(r0, 3, r1, 3);
+        for (const c of [2, 3]) // keep the block's bottom line after merging
+          for (let r = r0; r <= r1; r++)
+            ws.getCell(r, c).border = { left: med, right: med, bottom: r === r1 ? med : undefined };
+      }
+    }
+    const lastRow = rows.length + 2;
+
+    // conditional formatting: rows with KUANTITI -> light fill, bold, thin border
+    ws.addConditionalFormatting({
+      ref: "A3:C" + lastRow,
+      rules: [{
+        type: "expression", priority: 1, formulae: ['$B3<>""'],
+        style: { font: { bold: true }, fill: solid(palette.light), border: { left: thin, right: thin, top: thin, bottom: thin } },
+      }],
+    });
+    ws.pageSetup.printArea = "A1:C" + lastRow;
+
+    const buffer = await wb.xlsx.writeBuffer();
+    return {
+      buffer,
+      info: { rows: rows.length, mainItems: blocks.filter((b) => b[2]).length, blocks: blocks.length },
+    };
+  }
+
+  async function generate(ExcelJS, arrayBuffer, palette) {
+    return buildWorkbook(ExcelJS, await readRaw(ExcelJS, arrayBuffer), palette);
+  }
+  async function generateFromText(ExcelJS, text, palette) {
+    const { rows, notes } = rowsFromText(text);
+    const out = await buildWorkbook(ExcelJS, rows, palette);
+    out.info.notes = notes;
+    return out;
+  }
+
+  root.TenderEngine = { PRESETS, RawFormatError, paletteFromBase, applyTint, hex6, readRaw, rowsFromText, groupBlocks, buildWorkbook, generate, generateFromText };
+  if (typeof module !== "undefined" && module.exports) module.exports = root.TenderEngine;
+})(typeof window !== "undefined" ? window : globalThis);
+
+</script>
+<script>
+(function () {
+  var E = window.TenderEngine;
+  var $ = function (id) { return document.getElementById(id); };
+  var state = { file: null, source: "text", dark: "", light: "", preset: null, result: null, saving: false };
+
+  // ---- remembered last preset (per viewer convenience only) ----
+  function lastPreset() { try { return localStorage.getItem("jx_last_preset"); } catch (e) { return null; } }
+  function rememberPreset(p) { try { if (p) localStorage.setItem("jx_last_preset", p); } catch (e) {} }
+
+  // ---- swatches ----
+  var last = lastPreset();
+  var sw = $("swatches");
+  Object.keys(E.PRESETS).forEach(function (name) {
+    var pal = E.paletteFromBase(name);
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "sw"; b.dataset.name = name; b.setAttribute("aria-pressed", "false");
+    b.innerHTML = '<span class="pair"><span style="background:#' + pal.dark + '"></span><span style="background:#' + pal.light + '"></span></span>' +
+      '<span class="nm">' + name + '</span><span class="last">' + (name === last ? "Terakhir guna" : "") + "</span>";
+    b.addEventListener("click", function () { setPreset(name); });
+    sw.appendChild(b);
+  });
+
+  function paintPreview() {
+    var s = $("sheet");
+    s.style.setProperty("--pv-dark", "#" + state.dark);
+    s.style.setProperty("--pv-light", "#" + state.light);
+    $("darkPick").value = "#" + state.dark.toLowerCase();
+    $("lightPick").value = "#" + state.light.toLowerCase();
+    $("darkHex").textContent = "#" + state.dark;
+    $("lightHex").textContent = "#" + state.light;
+    Array.prototype.forEach.call(sw.children, function (el) { el.setAttribute("aria-pressed", String(el.dataset.name === state.preset)); });
+    invalidate();
+  }
+  function setPreset(name) {
+    var pal = E.paletteFromBase(name);
+    state.dark = pal.dark; state.light = pal.light; state.preset = name; paintPreview();
+  }
+  $("darkPick").addEventListener("input", function (e) { state.dark = E.hex6(e.target.value); state.preset = null; paintPreview(); });
+  $("lightPick").addEventListener("input", function (e) { state.light = E.hex6(e.target.value); state.preset = null; paintPreview(); });
+
+  // start on a preset different from the last one used, so colours rotate by default
+  var names = Object.keys(E.PRESETS);
+  var startIdx = last && names.indexOf(last) >= 0 ? (names.indexOf(last) + 1) % names.length : 0;
+  setPreset(names[startIdx]);
+
+  // ---- input: pasted text (main) or .xlsx upload (optional) ----
+  function fmtSize(n) { return n > 1048576 ? (n / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(n / 1024)) + " KB"; }
+  function refreshGo() { $("go").disabled = !($("paste").value.trim() || state.file); }
+  var checkTimer;
+  function checkPaste() {
+    var v = $("paste").value, n = $("pastenote");
+    n.className = "hint";
+    if (!v.trim()) { n.textContent = ""; return; }
+    try {
+      var r = E.rowsFromText(v);
+      var items = r.rows.filter(function (x) { return x.qty !== null; }).length;
+      n.textContent = r.rows.length + " baris dikesan, " + items + " item utama." + (r.notes.length ? " " + r.notes.join(" ") : "");
+    } catch (e) { n.className = "hint bad"; n.textContent = e.message; }
+  }
+  $("paste").addEventListener("input", function () {
+    state.source = "text"; refreshGo(); invalidate();
+    clearTimeout(checkTimer); checkTimer = setTimeout(checkPaste, 250);
+  });
+  $("file").addEventListener("change", function (e) {
+    var f = e.target.files[0]; if (!f) return;
+    if (!/\.xlsx$/i.test(f.name)) { showMsg("err", "Fail mesti .xlsx. Atau paste teks terus ke dalam kotak di atas."); $("file").value = ""; return; }
+    state.file = f; state.source = "file";
+    $("fname").textContent = f.name; $("fsize").textContent = fmtSize(f.size);
+    $("filechip").hidden = false; refreshGo(); invalidate();
+    if (!state.nameEdited) $("outname").value = "JADUAL_SPESIFIKASI_" + f.name.replace(/\.xlsx$/i, "").replace(/[^\w\-]+/g, "_").slice(0, 40);
+  });
+  $("outname").addEventListener("input", function () { state.nameEdited = true; });
+  $("clearfile").addEventListener("click", function () {
+    state.file = null; $("file").value = ""; $("filechip").hidden = true; state.source = "text"; refreshGo(); invalidate();
+  });
+
+  // ---- status ----
+  function showMsg(kind, text) {
+    var box = $("status"); box.innerHTML = "";
+    var d = document.createElement("div"); d.className = "msg " + kind; d.textContent = text;
+    if (kind === "err") d.setAttribute("role", "alert");
+    box.appendChild(d); return d;
+  }
+  function invalidate() { if (state.result) { state.result = null; $("status").innerHTML = ""; } }
+
+  // ---- generate ----
+  $("go").addEventListener("click", async function () {
+    if (!state.file && !$("paste").value.trim()) return;
+    if (!window.ExcelJS) { showMsg("err", "Pustaka Excel gagal dimuatkan. Semak sambungan internet dan muat semula halaman."); return; }
+    var btn = $("go"); btn.disabled = true; btn.textContent = "Menjana…";
+    try {
+      var pal = { dark: state.dark, light: state.light };
+      var text = $("paste").value;
+      var useFile = state.file && (state.source === "file" || !text.trim());
+      var out = useFile
+        ? await E.generate(window.ExcelJS, await state.file.arrayBuffer(), pal)
+        : await E.generateFromText(window.ExcelJS, text, pal);
+      state.result = out;
+      rememberPreset(state.preset);
+      var ok = showMsg("ok", "");
+      var t = document.createElement("span");
+      t.textContent = "Siap: " + out.info.mainItems + " item utama, " + out.info.blocks + " blok, " + out.info.rows + " baris." + (out.info.notes && out.info.notes.length ? " " + out.info.notes.join(" ") : "");
+      var sv = document.createElement("button"); sv.type = "button"; sv.className = "btn"; sv.textContent = "Muat turun .xlsx";
+      sv.addEventListener("click", save);
+      state.okBox = ok; ok.appendChild(t); ok.appendChild(sv); sv.focus();
+    } catch (err) {
+      showMsg("err", err instanceof E.RawFormatError ? err.message : "Gagal menjana fail: " + (err && err.message ? err.message : err));
+    } finally { btn.disabled = false; btn.textContent = "Jana Excel"; }
+  });
+
+  // ---- save using the standard browser download API (works outside Claude) ----
+  async function save() {
+    if (!state.result || state.saving) return;
+    var name = ($("outname").value || "JADUAL_SPESIFIKASI").replace(/[\\\/:*?"<>|]+/g, "_").trim().replace(/\.xlsx$/i, "") + ".xlsx";
+    state.saving = true;
+    try {
+      var blob = new Blob([state.result.buffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      });
+
+      // Ask the browser to download the generated workbook to the user's device.
+      var url = URL.createObjectURL(blob);
+      var link = document.createElement("a");
+      link.href = url;
+      link.download = name;
+      link.style.display = "none";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
+
+      if (state.okBox && state.okBox.isConnected) {
+        var n = document.createElement("span");
+        n.textContent = "Muat turun dimulakan: " + name;
+        state.okBox.appendChild(n);
+      }
+    } catch (e) {
+      showMsg("err", "Fail tak dapat dimuat turun" + (e && e.message ? ": " + e.message : "."));
+    } finally {
+      state.saving = false;
+    }
+  }
+})();
+</script>
+
+</body></html>
