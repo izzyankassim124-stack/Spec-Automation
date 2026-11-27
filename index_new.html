@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="ms">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#F4EFE5">
-<title>JAXER | Auto Format Jadual Spesifikasi</title>
+<title>JAXER | Auto Format Specification Schedule</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
@@ -25,8 +25,8 @@ button,input,textarea{font:inherit}button{cursor:pointer}button:focus-visible,in
 .hero{position:relative;text-align:center;padding:14px 16px 30px;animation:fadeUp .65s ease both}
 .brand{display:inline-flex;align-items:center;gap:22px;margin-bottom:8px}
 .brand-mark{position:relative;font:italic 800 38px/1 var(--head);letter-spacing:-2px;color:var(--navy);padding:13px 8px 5px}
-.brand-mark:before{content:"";position:absolute;left:1px;right:-4px;top:0;height:17px;border-top:5px solid var(--gold-dark);border-radius:70% 70% 0 0;transform:rotate(-5deg)}
-.brand-divider{height:54px;width:2px;background:var(--gold-dark);opacity:.8}
+.brand-mark:before{content:"";position:absolute;left:1px;right:-4px;top:0;height:17px;border-top:5px solid var(--navy);border-radius:70% 70% 0 0;transform:rotate(-5deg)}
+.brand-divider{height:54px;width:2px;background:var(--navy);opacity:.1}
 h1{font:800 clamp(27px,3vw,42px)/1.12 var(--head);letter-spacing:-1.2px;color:var(--navy);margin:0;text-align:left}
 .hero-sub{margin:14px 0 0;color:var(--navy-2);font-size:16px;font-weight:600;letter-spacing:.04em}
 .hero-rule{height:3px;width:80px;border-radius:5px;background:linear-gradient(90deg,transparent,var(--gold-dark),transparent);margin:20px auto 0}
@@ -44,7 +44,7 @@ textarea::placeholder{color:#8490A0}textarea:focus{border-color:var(--gold-dark)
 .or{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.08em}.or:before,.or:after{content:"";height:1px;background:var(--line);flex:1}
 .upload{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:18px 12px;border:1.5px dashed #B9C6D4;border-radius:14px;background:#FBF8F1;color:var(--navy);min-height:116px;transition:border-color .2s,background .2s,transform .2s}
 .upload:hover{border-color:var(--gold-dark);background:#FBF2E1;transform:translateY(-2px)}.upload svg{width:32px;height:32px}.upload strong{font-size:15px}.upload small{font-size:12px;color:var(--muted)}.upload input{display:none}
-.file-chip{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#F1E9D9;color:var(--navy);border-radius:9px;padding:9px 11px;font-size:12px}.file-chip span{overflow-wrap:anywhere}.text-button{border:0;background:none;color:var(--navy-2);text-decoration:underline;font-size:12px;font-weight:700;padding:4px}
+.file-chip{display:flex;align-items:center;justify-content:flex-end;gap:10px;background:#F1E9D9;color:var(--navy);border-radius:9px;padding:9px 11px;font-size:12px}.file-chip span{overflow-wrap:anywhere}.text-button{border:0;background:none;color:var(--navy-2);text-decoration:underline;font-size:12px;font-weight:700;padding:4px}
 .palette-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 10px}
 .swatch{border:1px solid transparent;background:transparent;border-radius:11px;padding:5px 4px 7px;color:var(--ink);display:flex;flex-direction:column;gap:6px;align-items:center;transition:transform .2s,border-color .2s,background .2s;min-width:0}
 .swatch:hover{transform:translateY(-3px);background:#F8F2E8}.swatch[aria-pressed=true]{border-color:var(--gold-dark);background:#F9F1E3;box-shadow:0 0 0 2px rgba(216,189,138,.22)}
@@ -83,7 +83,7 @@ textarea::placeholder{color:#8490A0}textarea:focus{border-color:var(--gold-dark)
   <header class="hero">
     <div class="brand">
       <div class="brand-mark">JAXER</div><div class="brand-divider"></div>
-      <h1>Auto Format<br>Jadual Spesifikasi</h1>
+      <h1>Auto Format<br>Specification Schedule</h1>
     </div>
     <p class="hero-sub">Paste <span>•</span> Upload <span>•</span> Customise <span>•</span> Preview <span>•</span> Download</p>
     <div class="hero-rule"></div>
@@ -91,56 +91,56 @@ textarea::placeholder{color:#8490A0}textarea:focus{border-color:var(--gold-dark)
 
   <main class="steps">
     <section class="card">
-      <div class="card-head"><span class="step-no">1</span><h2>Dapatkan Data</h2>
+      <div class="card-head"><span class="step-no">1</span><h2>Get Data</h2>
         <svg class="head-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3V2h6v1M8 8h8M8 12h8M8 16h5"/></svg>
       </div>
       <div class="card-body">
-        <p class="description">Salin dan tampal data daripada ePerolehan atau muat naik fail Excel. Tender dengan beberapa jenis spesifikasi? Tambah satu tab bagi setiap jenis. Setiap tab menjadi satu sheet dalam Excel yang sama.</p>
-        <div class="sheet-tabs" id="sheetTabs" role="tablist" aria-label="Jenis spesifikasi"></div>
+        <p class="description">Paste tender specification data from ePerolehan or upload an Excel file. For tenders with multiple specification types, add a separate tab for each type. Each tab will become a separate worksheet in the same Excel file.</p>
+        <div class="sheet-tabs" id="sheetTabs" role="tablist" aria-label="Specification tabs"></div>
         <div class="sheet-name">
-          <label class="label" for="sheetName">Nama sheet</label>
-          <div class="name-row"><input id="sheetName" type="text" maxlength="31" autocomplete="off" placeholder="cth: LAPTOP"><button class="text-button" type="button" id="removeSheet" hidden>Buang sheet</button></div>
+          <label class="label" for="sheetName">Sheet Name</label>
+          <div class="name-row"><input id="sheetName" type="text" maxlength="31" autocomplete="off" placeholder="e.g. Skop 1 Perisian"><button class="text-button" type="button" id="removeSheet" hidden>Delete Sheet</button></div>
         </div>
-        <div><label class="label" for="paste">Paste teks jadual spesifikasi</label><textarea id="paste" rows="7" spellcheck="false" placeholder="Paste data ePerolehan di sini...&#10;(copy keseluruhan jadual, termasuk header Item / Quantity)"></textarea><p class="hint" id="pastenote" aria-live="polite"></p></div>
-        <div class="or">ATAU</div>
+        <div><label class="label" for="paste">Paste Specification Table</label><textarea id="paste" rows="7" spellcheck="false" placeholder="Paste ePerolehan data here...&#10;(copy the whole table, including header Item / Quantity)"></textarea><p class="hint" id="pastenote" aria-live="polite"></p></div>
+        <div class="or">OR</div>
         <label class="upload" for="file">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 16V4m-4 4 4-4 4 4"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
-          <strong>Upload fail .xlsx</strong><small>Klik untuk pilih fail atau seret &amp; lepas</small>
+          <strong>Upload .xlsx File</strong><small>Click to browse or drag and drop &amp; lepas</small>
           <input type="file" id="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
         </label>
-        <div class="file-chip" id="filechip" hidden><span id="fname"></span><button class="text-button" type="button" id="clearfile">Buang fail</button></div>
+        <div class="file-chip" id="filechip" hidden><span id="fname"></span><button class="text-button" type="button" id="clearfile">Remove File</button></div>
       </div>
     </section>
 
     <section class="card">
-      <div class="card-head"><span class="step-no">2</span><h2>Pilih Warna</h2>
+      <div class="card-head"><span class="step-no">2</span><h2>Choose Colours</h2>
         <svg class="head-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20h1.2a2.1 2.1 0 0 0 1.5-3.6 1.2 1.2 0 0 1 .9-2h1.2A5.2 5.2 0 0 0 22 11.2C22 6.1 17.5 2 12 2ZM6.7 12a1.6 1.6 0 1 1 0-3.2 1.6 1.6 0 0 1 0 3.2Zm3-4.5a1.6 1.6 0 1 1 0-3.2 1.6 1.6 0 0 1 0 3.2Zm4.8 0a1.6 1.6 0 1 1 0-3.2 1.6 1.6 0 0 1 0 3.2Zm3 4.5a1.6 1.6 0 1 1 0-3.2 1.6 1.6 0 0 1 0 3.2Z"/></svg>
       </div>
       <div class="card-body">
-        <p class="description">Pilih warna untuk sheet <strong id="colorFor"></strong>. Setiap sheet boleh ada warna sendiri: tukar tab di langkah 1, kemudian pilih warna lain.</p>
-        <div class="palette-grid" id="swatches" role="group" aria-label="Pilihan tema warna"></div>
+        <p class="description">Choose colours for sheet<strong id="colorFor"></strong>. Each sheet can have its own colours. Switch tabs in Step 1, then choose a different colour.</p>
+        <div class="palette-grid" id="swatches" role="group" aria-label="Colour theme options"></div>
         <div class="pickers">
-          <div class="pick"><label for="darkPick">Header (gelap)</label><div class="pick-row"><input type="color" id="darkPick"><code id="darkHex"></code></div></div>
-          <div class="pick"><label for="lightPick">Baris item (cerah)</label><div class="pick-row"><input type="color" id="lightPick"><code id="lightHex"></code></div></div>
+          <div class="pick"><label for="darkPick">Header (Dark)</label><div class="pick-row"><input type="color" id="darkPick"><code id="darkHex"></code></div></div>
+          <div class="pick"><label for="lightPick">Item Rows (Light)</label><div class="pick-row"><input type="color" id="lightPick"><code id="lightHex"></code></div></div>
         </div>
-        <p class="hint">Warna pilihan akan digunakan pada header dan baris item utama dalam Excel.</p>
+        <p class="hint">Selected colours will be applied to the header and main item rows in the Excel file.</p>
       </div>
     </section>
 
     <section class="card">
-      <div class="card-head"><span class="step-no">3</span><h2>Jana Excel</h2>
+      <div class="card-head"><span class="step-no">3</span><h2>Generate Excel</h2>
         <svg class="head-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m-5-5 5 5 5-5M4 17v3h16v-3"/></svg>
       </div>
       <div class="card-body">
-        <p class="description">Lihat pratonton hasil sebelum memuat turun.</p>
-        <div class="filename"><label class="label" for="outname">Nama fail (pilihan)</label><input id="outname" type="text" value="JADUAL_SPESIFIKASI" autocomplete="off"></div>
+        <p class="description">Preview the output before downloading.</p>
+        <div class="filename"><label class="label" for="outname">File Name (Optional)</label><input id="outname" type="text" value="JADUAL_SPESIFIKASI" autocomplete="off"></div>
         <div class="actions"><button class="btn btn-secondary" type="button" id="go" disabled>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg> Pratonton Excel</button>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg> Preview Excel</button>
           <button class="btn btn-primary" type="button" id="download" hidden disabled>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m-5-5 5 5 5-5M4 17v3h16v-3"/></svg> Muat turun .xlsx</button>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m-5-5 5 5 5-5M4 17v3h16v-3"/></svg> Download .xlsx</button>
         </div>
         <div class="preview-box" id="previewBox">
-          <div class="preview-top"><span>Pratonton jadual</span><span id="previewMeta">—</span></div>
+          <div class="preview-top"><span>Table Preview</span><span id="previewMeta">—</span></div>
           <div class="preview-scroll"><table class="preview-table" id="previewTable"><thead><tr><th>ITEM / SPESIFIKASI</th><th>KUANTITI</th><th>MAKLUMBALAS</th></tr></thead><tbody></tbody></table></div>
         </div>
         <div class="status" id="status" role="status" aria-live="polite"></div>
@@ -148,8 +148,7 @@ textarea::placeholder{color:#8490A0}textarea:focus{border-color:var(--gold-dark)
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="tip"><div class="tip-icon"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 18h6m-5 3h4m-5.5-6.5A7 7 0 1 1 15.5 14c-.8.7-1.3 1.5-1.4 2.5H9.9c-.1-1-.6-1.8-1.4-2.5Z"/></svg></div><div><strong>Tip Penggunaan</strong><span>Pastikan data ePerolehan lengkap sebelum menjana Excel.</span></div></div>
+  <footer class="footer">    
     <div class="footer-brand">JAXER<small>Automate. Simplify. Excel.</small></div>
   </footer>
 </div>
@@ -163,8 +162,8 @@ textarea::placeholder{color:#8490A0}textarea:focus{border-color:var(--gold-dark)
   const COL_WIDTHS = { 1: 60.14, 2: 9.86, 3: 53.57 }; // from the company template
   const MAIN_ROW_MIN_HEIGHT = 33.0;
   const PRESETS = {
-    biru: "0F9ED5", oren: "E97132", hijau: "196B24", ungu: "A02B93",
-    merah: "C00000", kuning: "FFC000", pink: "D6336C", kelabu: "7F7F7F",
+    blue: "0F9ED5", orange: "E97132", green: "196B24", purple: "A02B93",
+    red: "C00000", yellow: "FFC000", pink: "D6336C", grey: "7F7F7F",
   };
 
   class RawFormatError extends Error {}
